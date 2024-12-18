@@ -8,7 +8,7 @@
  * @web: https://github.com/ktamas77/team-gource
  */
 
-$config = yaml_parse(file_get_contents(__DIR__ . 'tg.conf'));
+$config = yaml_parse(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR .'tg.conf'));
 
 function updateRepo($org, $repo) {
     if (!is_dir('repos')) {
@@ -19,7 +19,7 @@ function updateRepo($org, $repo) {
     } else {
         $currentDir = getcwd();
         chdir("repos/$repo");
-        exec("git pull origin master");
+        exec("git pull");
         chdir($currentDir);
     }
 }
@@ -31,7 +31,7 @@ function getGourceLog($repo) {
     if (!is_dir('logs')) {
         mkdir('logs');
     }
-    $logName = tempnam("tmp/", "gource-repo-$repo-");
+    $logName = tempnam("./tmp/", "gource-repo-$repo-");
     exec("gource repos/$repo --output-custom-log $logName");
     return $logName;
 }
@@ -110,32 +110,35 @@ function sortMasterLog($masterLog) {
 $teams = $config['teams'];
 foreach ($teams as $team) {
     $teamName = $team['name'];
-    $teamCollection = $team['collection'];
-    $excluded = [];
-    if (isset($team['excluded'])) {
-        $excluded = $team['excluded'];
-    }
-    print "Team: $teamName\n";
-    print "Collection: $teamCollection\n";
-    $repos = $config['collections'];
-    $members = $team['members'];
-    foreach ($repos as $repo) {
-        if ($repo['name'] === $teamCollection) {
-            $teamOrg = $repo['organization'];
-            $teamRepos = $repo['repos'];
-            $masterLog = tempnam("tmp/", "gource-master-log-$teamCollection");
-            foreach ($teamRepos as $repoName) {
-                print "updating repository for $repoName\n";
-                updateRepo($teamOrg, $repoName);
-                print "extracting logs for $repoName\n";
-                $logName = getGourceLog($repoName);
-                filterExcludedNamesFromLog($logName, $excluded);
-                filterNonMembersFromLog($logName, $members);
-                addRepoToLog($logName, $repoName, $teamOrg);
-                appendMasterLog($masterLog, $logName);
+    $masterLog = tempnam("./tmp/", "gource-master-log-$teamName");
+    foreach ($team['collections'] as $teamCollection) {
+        // $teamCollection = $team['collection'];
+        $excluded = [];
+        if (isset($team['excluded'])) {
+            $excluded = $team['excluded'];
+        }
+        print "Team: $teamName\n";
+        print "Collection: $teamCollection\n";
+        $repos = $config['collections'];
+        $members = $team['members'];
+        foreach ($repos as $repo) {
+            if ($repo['name'] === $teamCollection) {
+                $teamOrg = $repo['organization'];
+                $teamRepos = $repo['repos'];
+                foreach ($teamRepos as $r) {
+                    $repoName = $r['name'];
+                    print "updating repository for ".json_encode($repoName)."\n";
+                    updateRepo($teamOrg, $repoName);
+                    print "extracting logs for $repoName\n";
+                    $logName = getGourceLog($repoName);
+                    filterExcludedNamesFromLog($logName, $excluded);
+                    // filterNonMembersFromLog($logName, $members);
+                    addRepoToLog($logName, $repoName, $teamOrg);
+                    appendMasterLog($masterLog, $logName);
+                }
+                sortMasterLog($masterLog);
             }
-            sortMasterLog($masterLog);
-            rename($masterLog, "logs/gource-master-log-$teamCollection.log");
         }
     }
+    rename($masterLog, "logs/gource-master-log-$teamName.log");
 }

@@ -1,6 +1,8 @@
 teams:
   - name: main team
-    collection: frontend-repos
+    collection: 
+      - frontend-repos
+      - tools
     configuration: slow-render
     video: default
     members:
@@ -10,7 +12,9 @@ teams:
           aliases: [john123, John Doe, john@mail.com]
     excluded: [automated-script, garbage-collector]
   - name: team2
-    collection: backend-repos
+    collection: 
+      - backend-repos
+      - tools
     configuration: fast-render
     video: default
     members:
@@ -30,6 +34,11 @@ collections:
       - name: logservice
       - name: userservice
       - name: microservice
+  - name: tools
+    organization: unicorp
+    repos:
+      - name: deployments
+      - name: mailer-tools
 
 configurations:
   - name: slow-render

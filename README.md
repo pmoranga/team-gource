@@ -1,4 +1,14 @@
-# team-gource
+original from ktamas77/team-gource
+
+## Team Gource
+
+> Just for fun
+
+Renders visualization of changes accross all GIT from MOVE into a mp4 video.
+
+# Original readme
+
+## team-gource
 ### Gource Visualization for your entire Organization
 
 Gource is a great tool to visualize the history of individual repositories.
@@ -8,6 +18,14 @@ This tool will help you to visualize an *entire organization's* activities throu
 ```bash
 brew install gource ffmpeg
 ```
+
+## Steps:
+
+1. Install `gource` and `ffmpeg`
+2. update `tg.conf` accordly
+3. run `php tg.php`
+4. run `run-after.sh` without parameters or put with group to render, ex: `run-after.sh DevOps`
+5. View the files.
 
 ## How to install:
 ```
@@ -21,7 +39,8 @@ You need to rename the given `tg.conf.example` file into `tg.conf`, then edit th
 ```yaml
 teams:
   - name: main team # verbose name of the team
-    collection: frontend-repos # id of the collection of the repos to scan
+    collection: # List of collections
+      - frontend-repos # id of the collection of the repos to scan
     members: # list of the members who are part of your team - only these users will be part of the animation
         - name: Tamas # name of the user as it will be see in the rendered animation
           aliases: [ktamas77, Tamas Kalman, ktamas77@gmail.com] # aliases of the user (it will be combined into one)
@@ -29,7 +48,8 @@ teams:
           aliases: [john123, John Doe, john@mail.com] # user aliases
     excluded: [automated-script, garbage-collector] # excluded these users; put here the bots, if you have any
   - name: team2 # example of another team (you can define as many teams as needed)
-    collection: backend-repos
+    collection: 
+      - backend-repos
     members:
         - name: Smith
           aliases: [smith123, Smith, smith@mail.com]
