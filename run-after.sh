@@ -4,7 +4,7 @@ TYPE=${1:-Developers}
 # FILE=${1:-logs/gource-master-log-DevOps.log}
 
 
-gource  logs/gource-master-log-${TYPE}.log  --title Move-${TYPE} --file-idle-time 15 \
+gource  logs/gource-master-log-${TYPE}.log  --title ${TYPE} --file-idle-time 15 \
   --seconds-per-day 0.02 --multi-sampling --stop-at-end \
   --hide mouse,progress,filenames --date-format "%d/%m/%y" \
   --user-font-size 20  --max-files 0 --background-colour 000000 \

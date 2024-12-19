@@ -4,7 +4,7 @@ original from ktamas77/team-gource
 
 > Just for fun
 
-Renders visualization of changes accross all GIT from MOVE into a mp4 video.
+Renders visualization of changes accross multiple GIT repository into one mp4 video.
 
 # Original readme
 

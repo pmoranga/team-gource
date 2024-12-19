@@ -1,6 +1,6 @@
 teams:
   - name: main team
-    collection: 
+    collections: 
       - frontend-repos
       - tools
     configuration: slow-render
@@ -12,7 +12,7 @@ teams:
           aliases: [john123, John Doe, john@mail.com]
     excluded: [automated-script, garbage-collector]
   - name: team2
-    collection: 
+    collections: 
       - backend-repos
       - tools
     configuration: fast-render
